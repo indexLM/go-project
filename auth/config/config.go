@@ -1,10 +1,5 @@
 package config
 
-import (
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
-)
-
 type Server struct {
 	System System `json:"system" yaml:"system"`
 	Mysql  Mysql  `json:"mysql" yaml:"mysql"`
@@ -44,24 +39,11 @@ type Redis struct {
 //日志配置
 type Log struct {
 	Prefix  string `json:"prefix" yaml:"prefix"`
-	LogFile bool   `json:"log_file" yaml:"log_file"`
+	LogFile bool   `json:"log_file" yaml:"log-file"`
 	Stdout  string `json:"stdout" yaml:"stdout"`
 	File    string `json:"file" yaml:"file"`
 }
 
 type Jwt struct {
 	SignKey string `json:"signKey" yaml:"signKey"`
-}
-
-//读取yaml文件到对应类
-func CofParse(file string, in interface{}) error {
-	yamlFile, err := ioutil.ReadFile(file)
-	if err != nil {
-		return err
-	}
-	err = yaml.Unmarshal(yamlFile, in)
-	if err != nil {
-		return err
-	}
-	return nil
 }
