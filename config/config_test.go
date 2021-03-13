@@ -1,6 +1,7 @@
 package config
 
 import (
+	"go-project/utils"
 	"os"
 	"testing"
 )
@@ -11,6 +12,6 @@ func TestConfig(t *testing.T) {
 	if err != nil {
 
 	}
-	err = CofParse(dir+"/config.yaml", *MyServer)
+	err = utils.CofParse(dir+"/config.yaml", *MyServer)
 	t.Log(MyServer)
 }
