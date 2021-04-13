@@ -1,8 +1,6 @@
 # gin jwt swagger example
-`author: asong`
+`author: indexLM`
 `time: 2020-08-02`
-`公众号：Golang梦工厂`
-![qrCode](https://song-oss.oss-cn-beijing.aliyuncs.com/wx/qrcode_for_gh_efed4775ba73_258.jpg)
 
 
 |   版本  | 更新日期  |  更新内容 |
@@ -23,15 +21,12 @@
 ## 项目演示
 这里没有写前端，就不演示界面了，直接展示swagger生成的文档。直接可以进行接口测试。
 
-![](./static/images/swagger-ui.png)
-
-
 ## 使用说明
 - 下载项目
 ```shell
-$ git clone git@github.com:asong2020/Golang_Dream.git
+$ git clone https://github.com/indexLM/go-project.git
 ```
-将项目放到$GOPATH/src/asong.cloud/目录下。
+将项目放到$GOPATH/src/go-project/目录下。
 - 下载相关依赖：
 ```shell
 $ export GO111MODULE=on
