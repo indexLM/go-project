@@ -38,12 +38,6 @@ $ go run main.go
 ```
 
 ## 项目架构
-### 系统架构
-![项目架构](./static/images/system.png)
-
-
-### 功能说明
-![pass](./static/images/pass.png)
 
 ### 目录结构
 
