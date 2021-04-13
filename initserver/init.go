@@ -1,10 +1,11 @@
-package init
+package initserver
 
 import (
 	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/sirupsen/logrus"
 	"go-project/global"
 	"go-project/handler"
@@ -23,7 +24,7 @@ func Logger() {
 
 //初始化数据库（mysql）
 func Mysql() {
-	connInfo := fmt.Sprintf("%s:%s@(%s)/%s?useUnicode=true&allowMultiQueries=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL",
+	connInfo := fmt.Sprintf("%s:%s@(%s)/%s?useUnicode=true&allowMultiQueries=true&characterEncoding=UTF-8&zeroDateTimeBehavior=CONVERT_TO_NULL",
 		global.MyServer.Mysql.Username,
 		global.MyServer.Mysql.Password,
 		global.MyServer.Mysql.Host,
@@ -53,7 +54,7 @@ func Redis() {
 }
 
 //初始化路由
-func router() *gin.Engine {
+func Router() *gin.Engine {
 	// 默认已经连接了 Logger and Recovery 中间件
 	var Router = gin.Default()
 	//全局中间件
