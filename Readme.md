@@ -1,6 +1,6 @@
 # gin jwt
 `author: indexLM`
-`time: 2020-08-02`
+`time: 2021-03-02`
 
 ## 版本说明
 - golang: 1.14
