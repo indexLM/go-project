@@ -1,5 +1,5 @@
 system:
-  port: 80
+  port: 8888
 
 mysql:
   host: 39.102.79.29:3306
@@ -19,7 +19,7 @@ redis:
     tokenexpired: 7200 # expired time 2*60*60
 
 log:
-  prefix: '/go/logs'
+  prefix: 'D://go/logs'
   log-file: true
   stdout: 'DEBUG'
   file: 'DEBUG'

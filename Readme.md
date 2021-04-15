@@ -1,4 +1,4 @@
-# gin jwt swagger example
+# gin jwt
 `author: indexLM`
 `time: 2020-08-02`
 
