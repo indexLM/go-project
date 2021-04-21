@@ -2,6 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"go-project/global"
 	"go-project/model/request"
 	response "go-project/model/resopnse"
 )
@@ -21,5 +23,10 @@ func login(c *gin.Context) {
 		response.FailWithMessage("参数错误", c)
 		return
 	}
+	global.MyLogger.WithFields(logrus.Fields{
+		"event": "event",
+		"topic": "topic",
+		"key":   "key",
+	}).Info("1234", req.Username, req.Password, "测")
 	response.OkWithData(req.Username+"你好,你的密码是："+req.Password, c)
 }

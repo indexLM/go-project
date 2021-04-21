@@ -1,6 +1,7 @@
 package initserver
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,8 @@ import (
 	"go-project/global"
 	"go-project/handler"
 	"go-project/middleware"
+	"io"
+	"log"
 	"os"
 	"time"
 )
@@ -17,9 +20,18 @@ import (
 //初始化日志打印
 func Logger() {
 	global.MyLogger = logrus.New()
-	global.MyLogger.SetFormatter(&logrus.TextFormatter{})
-	global.MyLogger.SetOutput(os.Stdout)
-	global.MyLogger.SetLevel(logrus.DebugLevel)
+	writer1 := &bytes.Buffer{}
+	writer2 := os.Stdout
+	fmt.Println(global.MyServer.Log.Prefix)
+	writer3, err := os.OpenFile(global.MyServer.Log.Prefix, os.O_WRONLY|os.O_CREATE, 0755)
+	if err != nil {
+		log.Fatalf("创建日志文件失败,失败原因: %v", err)
+	}
+	global.MyLogger.SetOutput(io.MultiWriter(writer1, writer2, writer3))
+	global.MyLogger.SetFormatter(&logrus.JSONFormatter{
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
+	global.MyLogger.SetLevel(logrus.InfoLevel)
 }
 
 //初始化数据库（mysql）
