@@ -2,15 +2,15 @@ package initserver
 
 import (
 	"bytes"
-	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/sirupsen/logrus"
 	"go-project/global"
 	"go-project/handler"
 	"go-project/middleware"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"io"
 	"log"
 	"os"
@@ -36,23 +36,40 @@ func Logger() {
 
 //初始化数据库（mysql）
 func Mysql() {
-	connInfo := fmt.Sprintf("%s:%s@(%s)/%s?useUnicode=true&allowMultiQueries=true&characterEncoding=UTF-8&zeroDateTimeBehavior=CONVERT_TO_NULL",
+	connInfo := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		global.MyServer.Mysql.Username,
 		global.MyServer.Mysql.Password,
 		global.MyServer.Mysql.Host,
 		global.MyServer.Mysql.Db)
 	var err error
-	global.MyDb, err = sql.Open("mysql", connInfo)
+	db, err := gorm.Open(mysql.New(mysql.Config{
+		DSN:                       connInfo, // DSN data source name
+		DefaultStringSize:         256,      // string 类型字段的默认长度
+		DisableDatetimePrecision:  true,     // 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
+		DontSupportRenameIndex:    true,     // 重命名索引时采用删除并新建的方式，MySQL 5.7 之前的数据库和 MariaDB 不支持重命名索引
+		DontSupportRenameColumn:   true,     // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
+		SkipInitializeWithVersion: false,    // 根据版本自动配置, &gorm.Config{})
+	}), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	if err != nil {
 		global.MyLogger.WithFields(logrus.Fields{"err": err}).Error("初始化连接数据库失败")
+		return
 	}
-	err = global.MyDb.Ping()
+	sqlDB, err := db.DB()
 	if err != nil {
-		global.MyLogger.WithFields(logrus.Fields{"err": err}).Error("ping mysql")
+		global.MyLogger.WithFields(logrus.Fields{"err": err}).Error("初始化连接数据库失败")
+		return
 	}
-	global.MyDb.SetMaxIdleConns(global.MyServer.Mysql.Conn.MaxIdle)
-	global.MyDb.SetMaxOpenConns(global.MyServer.Mysql.Conn.MaxOpen)
-	global.MyDb.SetConnMaxLifetime(5 * time.Minute)
+	// 设置空闲连接池中连接的最大数量
+	sqlDB.SetMaxIdleConns(global.MyServer.Mysql.Conn.MaxIdle)
+	// 设置打开数据库连接的最大数量
+	sqlDB.SetMaxOpenConns(global.MyServer.Mysql.Conn.MaxOpen)
+	// 设置了连接可复用的最大时间
+	sqlDB.SetConnMaxLifetime(time.Hour)
+	global.MyLogger.WithFields(logrus.Fields{"info": "sys"}).Error("初始化连接数据库成功")
+	initDb(db)
+	global.MyDb = db
 }
 
 //初始化缓存（redis）

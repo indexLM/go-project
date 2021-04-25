@@ -7,8 +7,8 @@ mysql:
   password: lm123
   db: cloud_db
   conn:
-    maxidle: 50
-    maxopen: 50
+    maxidle: 10
+    maxopen: 100
 
 redis:
   addr: 39.102.79.29:6379
