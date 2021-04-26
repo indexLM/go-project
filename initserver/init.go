@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
+	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"go-project/global"
 	"go-project/handler"
@@ -22,7 +23,6 @@ func Logger() {
 	global.MyLogger = logrus.New()
 	writer1 := &bytes.Buffer{}
 	writer2 := os.Stdout
-	fmt.Println(global.MyServer.Log.Prefix)
 	writer3, err := os.OpenFile(global.MyServer.Log.Prefix, os.O_WRONLY|os.O_CREATE, 0755)
 	if err != nil {
 		log.Fatalf("创建日志文件失败,失败原因: %v", err)
@@ -35,7 +35,7 @@ func Logger() {
 }
 
 //初始化数据库（mysql）
-func Mysql() {
+func MyGorm() {
 	connInfo := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		global.MyServer.Mysql.Username,
 		global.MyServer.Mysql.Password,
@@ -53,12 +53,12 @@ func Mysql() {
 		DisableForeignKeyConstraintWhenMigrating: true,
 	})
 	if err != nil {
-		global.MyLogger.WithFields(logrus.Fields{"err": err}).Error("初始化连接数据库失败")
+		global.MyLogger.WithFields(logrus.Fields{"err": err}).Error("初始化Gorm框架失败")
 		return
 	}
 	sqlDB, err := db.DB()
 	if err != nil {
-		global.MyLogger.WithFields(logrus.Fields{"err": err}).Error("初始化连接数据库失败")
+		global.MyLogger.WithFields(logrus.Fields{"err": err}).Error("初始化Gorm框架失败")
 		return
 	}
 	// 设置空闲连接池中连接的最大数量
@@ -67,9 +67,30 @@ func Mysql() {
 	sqlDB.SetMaxOpenConns(global.MyServer.Mysql.Conn.MaxOpen)
 	// 设置了连接可复用的最大时间
 	sqlDB.SetConnMaxLifetime(time.Hour)
-	global.MyLogger.WithFields(logrus.Fields{"info": "sys"}).Error("初始化连接数据库成功")
+	global.MyLogger.WithFields(logrus.Fields{"info": "sys"}).Error("初始化Gorm框架成功")
 	initDb(db)
 	global.MyDb = db
+}
+
+//初始化数据库（mysql）
+func MySqlx() {
+	connInfo := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		global.MyServer.Mysql.Username,
+		global.MyServer.Mysql.Password,
+		global.MyServer.Mysql.Host,
+		global.MyServer.Mysql.Db)
+	var err error
+	db, err := sqlx.Open("mysql", connInfo)
+	if err != nil {
+		panic("初始化sqlx框架失败")
+	}
+	// 设置空闲连接池中连接的最大数量
+	db.SetMaxIdleConns(global.MyServer.Mysql.Conn.MaxIdle)
+	// 设置打开数据库连接的最大数量
+	db.SetMaxOpenConns(global.MyServer.Mysql.Conn.MaxOpen)
+	// 设置了连接可复用的最大时间
+	db.SetConnMaxLifetime(time.Hour)
+	global.MySqlx = db
 }
 
 //初始化缓存（redis）
@@ -87,12 +108,12 @@ func Router() *gin.Engine {
 	// 默认已经连接了 Logger and Recovery 中间件
 	var Router = gin.Default()
 	//全局中间件
+	//全局异常处理
+	Router.Use(middleware.Recover)
 	//跨域请求放行中间件
 	Router.Use(middleware.Cors())
 	RouterGroup := Router.Group("")
 	//路由注册
 	handler.RouterAuthInit(RouterGroup)
-
-	global.MyLogger.Info("路由注册成功")
 	return Router
 }

@@ -2,18 +2,18 @@ system:
   port: 8888
 
 mysql:
-  host: 39.102.79.29:3306
-  username: root
-  password: lm123
-  db: cloud_db
+  host: 58.87.111.253:3306
+  username: cloud_user
+  password: w6TIsXDPGB3azvxdu/vF
+  db: lecare_cloud_db_v2
   conn:
     maxidle: 10
     maxopen: 100
 
 redis:
-  addr: 39.102.79.29:6379
-  db: 1
-  password: 'lm123'
+  addr: 118.89.237.99:6379
+  db: 15
+  password: ''
   poolsize: 100
   cache:
     tokenexpired: 7200 # expired time 2*60*60

@@ -20,9 +20,10 @@ func login(c *gin.Context) {
 	var req request.LoginRequest
 	_ = c.ShouldBind(&req)
 	if req.Username == "" || req.Password == "" {
-		response.FailWithMessage("参数错误", c)
-		return
+		panic("参数错误")
 	}
+	query, _ := global.MySqlx.Query("select * from system_users_account where account=?", req.Username)
+	query.Scan("")
 	global.MyLogger.WithFields(logrus.Fields{
 		"event": "event",
 		"topic": "topic",

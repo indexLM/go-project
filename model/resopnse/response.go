@@ -8,8 +8,8 @@ import (
 
 type Response struct {
 	Code int         `json:"code"`
-	Data interface{} `json:"data"`
 	Msg  string      `json:"msg"`
+	Data interface{} `json:"data"`
 }
 
 const (
@@ -20,8 +20,8 @@ const (
 func Result(code int, data interface{}, msg string, c *gin.Context) {
 	c.JSON(http.StatusOK, Response{
 		code,
-		data,
 		msg,
+		data,
 	})
 }
 
