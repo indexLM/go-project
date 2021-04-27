@@ -12,4 +12,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.0.5
 	gorm.io/gorm v1.21.8
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 )
