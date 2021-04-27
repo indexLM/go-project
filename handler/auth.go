@@ -2,10 +2,9 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
-	"go-project/global"
 	"go-project/model/request"
 	response "go-project/model/resopnse"
+	"go-project/service"
 )
 
 func RouterAuthInit(Router *gin.RouterGroup) {
@@ -22,12 +21,10 @@ func login(c *gin.Context) {
 	if req.Username == "" || req.Password == "" {
 		panic("参数错误")
 	}
-	query, _ := global.MySqlx.Query("select * from system_users_account where account=?", req.Username)
-	query.Scan("")
-	global.MyLogger.WithFields(logrus.Fields{
-		"event": "event",
-		"topic": "topic",
-		"key":   "key",
-	}).Info("1234", req.Username, req.Password, "测")
-	response.OkWithData(req.Username+"你好,你的密码是："+req.Password, c)
+	passwordLogin, err := service.PasswordLogin(&req)
+	if err != nil {
+		response.FailWithMessage(passwordLogin, c)
+		return
+	}
+	response.OkWithData(passwordLogin, c)
 }
