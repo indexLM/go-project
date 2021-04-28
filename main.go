@@ -34,6 +34,6 @@ func main() {
 	utils.LogInfo("sys", "初始化gin框架成功")
 	err := router.Run(address)
 	if err != nil {
-		panic("初始化gin框架失败")
+		utils.LogError("sys", "web服务启动失败")
 	}
 }

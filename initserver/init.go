@@ -119,6 +119,7 @@ func Router() *gin.Engine {
 	//跨域请求放行中间件
 	Router.Use(middleware.Cors())
 	routerGroupSecurity := Router.Group("security")
+	//认证中间件
 	routerGroupSecurity.Use(middleware.Auth)
 	routerGroupCommon := Router.Group("common")
 	//路由注册

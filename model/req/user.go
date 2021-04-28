@@ -1,4 +1,4 @@
-package request
+package req
 
 type LoginRequest struct {
 	Username string `form:"username" json:"username"`
