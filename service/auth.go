@@ -4,7 +4,9 @@ import (
 	"go-project/global"
 	"go-project/model/po"
 	"go-project/model/request"
+	"go-project/utils"
 	"golang.org/x/crypto/bcrypt"
+	"strconv"
 )
 
 func PasswordLogin(req *request.LoginRequest) (string, error) {
@@ -17,5 +19,9 @@ func PasswordLogin(req *request.LoginRequest) (string, error) {
 	if err != nil {
 		return "密码错误", err
 	}
-	return "登录成功", nil
+	generate, err := utils.JwtGenerate(strconv.FormatInt(int64(loginInfo.UserId), 10), loginInfo.NickName)
+	if err != nil {
+		return generate, err
+	}
+	return generate, nil
 }

@@ -44,6 +44,7 @@ type Log struct {
 	File    string `json:"file" yaml:"file"`
 }
 
+// JWT 签名结构
 type Jwt struct {
 	SignKey string `json:"signKey" yaml:"signKey"`
 }

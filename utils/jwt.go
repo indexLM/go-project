@@ -1,46 +1,39 @@
 package utils
 
 import (
-	"errors"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
+	"go-project/config"
+	"go-project/global"
+	"time"
 )
 
-// JWT 签名结构
-type JWT struct {
-	SigningKey []byte
-}
-
-// 一些常量
-var (
-	TokenExpired     error  = errors.New("令牌已过期")
-	TokenNotValidYet error  = errors.New("令牌尚未激活")
-	TokenMalformed   error  = errors.New("That's not even a token")
-	TokenInvalid     error  = errors.New("无效的令牌")
-	SignKey          string = "newtrekWang"
-)
-
-// 载荷，可以加一些自己需要的信息
-type CustomClaims struct {
-	ID    string `json:"userId"`
-	Name  string `json:"name"`
-	Phone string `json:"phone"`
-	jwt.StandardClaims
-}
-
-// 新建一个jwt实例
-func NewJWT() *JWT {
-	return &JWT{
-		[]byte(GetSignKey()),
+//生成令牌
+func JwtGenerate(userId string, username string) (string, error) {
+	claims := config.CustomClaims{
+		UserId: userId,
+		Name:   username,
 	}
+	// 签名生效时间
+	claims.NotBefore = time.Now().Unix() - 1000
+	// 过期时间 一小时
+	claims.ExpiresAt = time.Now().Unix() + 3600
+	//签发人
+	claims.Issuer = "indexLm"
+	jwt, err := global.MyJwt.Create(claims)
+	if err != nil {
+		return "生成令牌失败", err
+	}
+	return jwt, nil
 }
 
-// 获取signKey
-func GetSignKey() string {
-	return SignKey
-}
-
-// CreateToken 生成一个token
-func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(j.SigningKey)
+func JwtVerification(tokenString string, c *gin.Context) error {
+	parse, err := global.MyJwt.Parse(tokenString)
+	if err != nil {
+		return err
+	}
+	if c.Keys == nil {
+		c.Keys = make(map[string]interface{}, 0)
+	}
+	c.Keys["users"] = parse
+	return nil
 }

@@ -14,4 +14,5 @@ var (
 	MyDb     *gorm.DB
 	MySqlx   *sqlx.DB
 	MyRedis  *redis.Client
+	MyJwt    *config.Jwt
 )

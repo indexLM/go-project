@@ -2,20 +2,13 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-project/config"
 	"go-project/model/request"
 	response "go-project/model/resopnse"
 	"go-project/service"
 )
 
-func RouterAuthInit(Router *gin.RouterGroup) {
-	BaseRouter := Router.Group("auth")
-	{
-		BaseRouter.DELETE("logout", nil)
-		BaseRouter.POST("login", login)
-	}
-}
-
-func login(c *gin.Context) {
+func Login(c *gin.Context) {
 	var req request.LoginRequest
 	_ = c.ShouldBind(&req)
 	if req.Username == "" || req.Password == "" {
@@ -27,4 +20,9 @@ func login(c *gin.Context) {
 		return
 	}
 	response.OkWithData(passwordLogin, c)
+}
+func Logout(c *gin.Context) {
+	i := c.Keys["users"]
+	o := i.(*config.CustomClaims)
+	response.OkWithData(o.UserId, c)
 }

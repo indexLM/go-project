@@ -7,8 +7,8 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
+	"go-project/config"
 	"go-project/global"
-	"go-project/handler"
 	"go-project/middleware"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -67,7 +67,6 @@ func MyGorm() {
 	sqlDB.SetMaxOpenConns(global.MyServer.Mysql.Conn.MaxOpen)
 	// 设置了连接可复用的最大时间
 	sqlDB.SetConnMaxLifetime(time.Hour)
-	global.MyLogger.WithFields(logrus.Fields{"info": "sys"}).Error("初始化Gorm框架成功")
 	initDb(db)
 	global.MyDb = db
 }
@@ -103,17 +102,27 @@ func Redis() {
 	global.MyRedis = client
 }
 
+// 初始化jwt令牌
+func Jwt() {
+	global.MyJwt = &config.Jwt{
+		SignKey: global.MyServer.Jwt.SignKey,
+	}
+}
+
 //初始化路由
 func Router() *gin.Engine {
 	// 默认已经连接了 Logger and Recovery 中间件
-	var Router = gin.Default()
+	var Router = gin.New()
 	//全局中间件
 	//全局异常处理
 	Router.Use(middleware.Recover)
 	//跨域请求放行中间件
 	Router.Use(middleware.Cors())
-	RouterGroup := Router.Group("")
+	routerGroupSecurity := Router.Group("security")
+	routerGroupSecurity.Use(middleware.Auth)
+	routerGroupCommon := Router.Group("common")
 	//路由注册
-	handler.RouterAuthInit(RouterGroup)
+	routerCommonInit(routerGroupCommon)
+	routerSecurityInit(routerGroupSecurity)
 	return Router
 }

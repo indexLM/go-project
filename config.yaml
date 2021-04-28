@@ -25,4 +25,4 @@ log:
   file: 'DEBUG'
 
 jwt:
-  signkey: 'index'
+  signKey: 'index'

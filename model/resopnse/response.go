@@ -14,6 +14,7 @@ type Response struct {
 
 const (
 	ERROR   = 9
+	AUTH    = 2
 	SUCCESS = 0
 )
 

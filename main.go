@@ -23,6 +23,9 @@ func init() {
 	utils.LogInfo("sys", "初始化sqlx框架成功")
 	initserver.Redis()
 	utils.LogInfo("sys", "初始化go-redis框架成功")
+	initserver.Jwt()
+	utils.LogInfo("sys", "初始化JWT成功")
+
 }
 
 func main() {
