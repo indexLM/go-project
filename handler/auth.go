@@ -9,12 +9,12 @@ import (
 )
 
 func Login(c *gin.Context) {
-	var req req.LoginRequest
-	_ = c.ShouldBind(&req)
-	if req.Username == "" || req.Password == "" {
+	var loginRequest req.LoginRequest
+	_ = c.ShouldBind(&loginRequest)
+	if loginRequest.Username == "" || loginRequest.Password == "" {
 		panic("参数错误")
 	}
-	passwordLogin, err := service.PasswordLogin(&req)
+	passwordLogin, err := service.PasswordLogin(&loginRequest)
 	if err != nil {
 		resp.FailWithMessage(passwordLogin, c)
 		return

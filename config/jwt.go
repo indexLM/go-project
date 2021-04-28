@@ -10,7 +10,7 @@ import (
 var (
 	TokenExpired     error = errors.New("令牌已过期")
 	TokenNotValidYet error = errors.New("令牌尚未激活")
-	TokenMalformed   error = errors.New("That's not even a token")
+	TokenMalformed   error = errors.New("非正常令牌")
 	TokenInvalid     error = errors.New("无效的令牌")
 )
 
@@ -35,15 +35,16 @@ func (j *Jwt) Parse(tokenString string) (*CustomClaims, error) {
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil, TokenMalformed
+				err = TokenMalformed
 			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
-				return nil, TokenExpired
+				err = TokenExpired
 			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				return nil, TokenNotValidYet
+				err = TokenNotValidYet
 			} else {
-				return nil, TokenInvalid
+				err = TokenInvalid
 			}
 		}
+		return nil, err
 	}
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		return claims, nil
