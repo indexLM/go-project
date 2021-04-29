@@ -35,10 +35,10 @@ func JwtVerification(tokenString string, c *gin.Context) error {
 	if c.Keys == nil {
 		c.Keys = make(map[string]interface{}, 0)
 	}
-	unix := time.Now().Unix()
-	if (unix - parse.ExpiresAt) > 0 {
-		return config.TokenExpired
-	}
+	//unix := time.Now().Unix()
+	//if (unix - parse.ExpiresAt) > 0 {
+	//	return config.TokenExpired
+	//}
 	c.Keys["users"] = parse
 	return nil
 }
