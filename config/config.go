@@ -47,4 +47,5 @@ type Log struct {
 // JWT 签名结构
 type Jwt struct {
 	SignKey string `json:"signKey" yaml:"signKey"`
+	Expires int64  `json:"expires" yaml:"expires"`
 }

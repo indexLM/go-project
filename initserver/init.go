@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"go-project/config"
@@ -79,7 +80,7 @@ func MySqlx() {
 	var err error
 	db, err := sqlx.Open("mysql", connInfo)
 	if err != nil {
-		panic("初始化sqlx框架失败")
+		panic(err.Error())
 	}
 	// 设置空闲连接池中连接的最大数量
 	db.SetMaxIdleConns(global.MyServer.Mysql.Conn.MaxIdle)
