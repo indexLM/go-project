@@ -23,6 +23,7 @@ type CustomClaims struct {
 
 // 生成token
 func (j *Jwt) Create(claims CustomClaims) (string, error) {
+	claims.ExpiresAt += j.Expires
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(j.SignKey))
 }

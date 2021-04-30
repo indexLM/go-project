@@ -105,6 +105,7 @@ func Redis() {
 func Jwt() {
 	global.MyJwt = &config.Jwt{
 		SignKey: global.MyServer.Jwt.SignKey,
+		Expires: global.MyServer.Jwt.Expires,
 	}
 }
 

@@ -17,7 +17,7 @@ func JwtGenerate(userId string, username string) (string, error) {
 	// 签名生效时间
 	claims.NotBefore = unix - 1000
 	// 过期时间 一小时
-	claims.ExpiresAt = unix + 3600
+	claims.ExpiresAt = unix
 	//签发人
 	claims.Issuer = "indexLm"
 	jwt, err := global.MyJwt.Create(claims)

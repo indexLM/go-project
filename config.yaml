@@ -26,3 +26,4 @@ log:
 
 jwt:
   signKey: 'index'
+  expires: 60
