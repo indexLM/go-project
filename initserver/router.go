@@ -6,14 +6,14 @@ import (
 )
 
 func routerCommonInit(Router *gin.RouterGroup) {
-	BaseRouter := Router.Group("auth")
+	BaseRouter := Router.Group("/auth")
 	{
-		BaseRouter.POST("login", handler.Login)
+		BaseRouter.POST("/login", handler.Login)
 	}
 }
 func routerSecurityInit(Router *gin.RouterGroup) {
-	BaseRouter := Router.Group("auth")
+	BaseRouter := Router.Group("/auth")
 	{
-		BaseRouter.DELETE("logout", handler.Logout)
+		BaseRouter.DELETE("/logout", handler.Logout)
 	}
 }

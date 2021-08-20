@@ -1,7 +1,7 @@
 package po
 
 type LoginInfo struct {
-	UserId   uint64 `db:"user_id"`
+	UserId   uint64 `db:"id"`
 	Password string `db:"password"`
-	NickName string
+	BranchId uint64 `db:"branch_id"`
 }

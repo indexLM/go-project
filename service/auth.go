@@ -6,12 +6,11 @@ import (
 	"go-project/model/req"
 	"go-project/utils"
 	"golang.org/x/crypto/bcrypt"
-	"strconv"
 )
 
 func PasswordLogin(req *req.LoginRequest) (string, error) {
 	var loginInfo po.LoginInfo
-	err := global.MySqlx.Get(&loginInfo, "select su.user_id,su.password from system_users_account sua inner join system_users su on sua.user_id=su.user_id where sua.account=? and sua.status=1 and  su.status =1  limit 1;", req.Username)
+	err := global.MySqlx.Get(&loginInfo, "select id,branch_id,password from his_branch_admin hba where username=? and hba.is_delete=0;", req.Username)
 	if err != nil {
 		return "用户名不存在", err
 	}
@@ -19,7 +18,7 @@ func PasswordLogin(req *req.LoginRequest) (string, error) {
 	if err != nil {
 		return "密码错误", err
 	}
-	generate, err := utils.JwtGenerate(strconv.FormatInt(int64(loginInfo.UserId), 10), loginInfo.NickName)
+	generate, err := utils.JwtGenerate(loginInfo.UserId, loginInfo.BranchId)
 	if err != nil {
 		return generate, err
 	}

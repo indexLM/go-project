@@ -8,10 +8,10 @@ import (
 )
 
 //生成令牌
-func JwtGenerate(userId string, username string) (string, error) {
+func JwtGenerate(userId uint64, branchId uint64) (string, error) {
 	claims := config.CustomClaims{
-		UserId: userId,
-		Name:   username,
+		UserId:   userId,
+		BranchId: branchId,
 	}
 	unix := time.Now().Unix()
 	// 签名生效时间

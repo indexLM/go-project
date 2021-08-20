@@ -2,10 +2,10 @@ system:
   port: 8888
 
 mysql:
-  host: 58.87.111.253:3306
-  username: cloud_user
-  password: w6TIsXDPGB3azvxdu/vF
-  db: lecare_cloud_db_v2
+  host: 58.87.111.253:3308
+  username: root
+  password: Lejian@123
+  db: lejian_hospital
   conn:
     maxidle: 10
     maxopen: 100
@@ -19,7 +19,7 @@ redis:
     tokenexpired: 7200 # expired time 2*60*60
 
 log:
-  prefix: 'D://go/logs/log.txt'
+  prefix: 'D://opt/log.txt'
   log-file: true
   stdout: 'DEBUG'
   file: 'DEBUG'

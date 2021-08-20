@@ -7,7 +7,7 @@ import (
 )
 
 func Auth(context *gin.Context) {
-	header := context.GetHeader("Token")
+	header := context.GetHeader("X-Access-Token")
 	if header == "" {
 		//封装通用json返回
 		resp.FailWithDetailed(resp.AUTH, nil, "无效的请求头", context)
