@@ -118,10 +118,10 @@ func Router() *gin.Engine {
 	Router.Use(middleware.Recover)
 	//跨域请求放行中间件
 	Router.Use(middleware.Cors())
-	routerGroupSecurity := Router.Group("security")
+	routerGroupSecurity := Router.Group("/security")
 	//认证中间件
 	routerGroupSecurity.Use(middleware.Auth)
-	routerGroupCommon := Router.Group("common")
+	routerGroupCommon := Router.Group("/common")
 	//路由注册
 	routerCommonInit(routerGroupCommon)
 	routerSecurityInit(routerGroupSecurity)

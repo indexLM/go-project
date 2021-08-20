@@ -11,7 +11,7 @@ func LogInfo(tag string, msg ...string) {
 }
 
 //打印info级别日志 格式后
-func LogInfoF(tag string, format string, msg ...string) {
+func LogInfoF(tag string, format string, msg ...interface{}) {
 	global.MyLogger.WithFields(logrus.Fields{"tag": tag}).Infof(format, msg)
 }
 

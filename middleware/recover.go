@@ -9,7 +9,7 @@ func Recover(c *gin.Context) {
 	defer func() {
 		if r := recover(); r != nil {
 			//封装通用json返回
-			resp.FailWithDetailed(99999, nil, errorToString(r), c)
+			resp.FailWithDetailed(0, nil, errorToString(r), c)
 			//终止后续接口调用，不加的话recover到异常后，还会继续执行接口里后续代码
 			c.Abort()
 		}
