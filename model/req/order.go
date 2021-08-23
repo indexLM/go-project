@@ -8,4 +8,6 @@ type OrderListReq struct {
 	BranchId        uint64    `form:"branchId" json:"branchId"`
 	AppointmentTime time.Time `form:"appointmentTime" json:"appointmentTime" time_format:"2006-01-02"`
 	Status          uint64    `form:"status" json:"status"  `
+	PageSize        uint64    `form:"pageSize" json:"pageSize"`
+	CurrentPage     uint64    `form:"currentPage" json:"currentPage"`
 }

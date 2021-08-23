@@ -7,3 +7,7 @@ type OrderListRes struct {
 	//AppointmentTime time.Time `json:"appointmentTime" time_format:"2006-01-02"`
 	//Status          uint64    `json:"status"  `
 }
+type OrderRes struct {
+	Count    uint64         `json:"count"`
+	InfoList []OrderListRes `json:"infoList"`
+}
