@@ -39,6 +39,7 @@ func JwtVerification(tokenString string, c *gin.Context) error {
 	//if (unix - parse.ExpiresAt) > 0 {
 	//	return config.TokenExpired
 	//}
-	c.Keys["users"] = parse
+	c.Keys["userId"] = parse.UserId
+	c.Keys["branchId"] = parse.BranchId
 	return nil
 }

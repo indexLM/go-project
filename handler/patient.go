@@ -8,19 +8,15 @@ import (
 	"go-project/service"
 )
 
-func OrderList(c *gin.Context) {
-	r := new(req.OrderListReq)
+func PatientList(c *gin.Context) {
+	r := new(req.PatientListReq)
 	err := c.BindQuery(r)
 	if err != nil {
 		panic("参数错误")
 	}
-	res := service.GetOrderList(r)
-	resp.OkWithData(res, c)
-}
-func OrderDetails(c *gin.Context) {
-	orderNo := c.Query("orderNo")
 	branchId := c.Keys["branchId"]
 	branchIdStr := fmt.Sprintf("%v", branchId)
-	res := service.GetOrderDetails(orderNo, branchIdStr)
+	r.BranchId = branchIdStr
+	res := service.GetPatientList(r)
 	resp.OkWithData(res, c)
 }

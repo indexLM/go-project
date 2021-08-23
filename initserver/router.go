@@ -19,5 +19,10 @@ func routerSecurityInit(Router *gin.RouterGroup) {
 	OrderRouter := Router.Group("/order")
 	{
 		OrderRouter.GET("/list", handler.OrderList)
+		OrderRouter.GET("/details", handler.OrderDetails)
+	}
+	PatientRouter := Router.Group("/patient")
+	{
+		PatientRouter.GET("/list", handler.PatientList)
 	}
 }

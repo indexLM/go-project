@@ -11,13 +11,17 @@ import (
 
 func GetOrderList(r *req.OrderListReq) *resp.OrderRes {
 	m := make(map[string]interface{})
-	selectList := "select hot.patient_name,hot.patient_gender "
-	sql := "from his_order_treatment as hot inner join his_schedule_period_date_object as hspdo on hot.schedule_id=hspdo.id inner join his_schedule_date as hsd on hspdo.date_id=hsd.id where  1=1 "
+	selectList := "select hot.order_no, hot.patient_name,\n" +
+		"       hot.patient_gender,\n" +
+		" 		hb.name as branch_name,\n" +
+		"       hot.booking_time,\n" +
+		"       hot.status "
+	sql := "from his_order_treatment as hot inner join his_schedule_period_date_object as hspdo on hot.schedule_id=hspdo.id inner join his_schedule_date as hsd on hspdo.date_id=hsd.id left join his_branch hb on hb.id=hot.branch_id where  goods_id = 3 "
 	name := r.PatientName
 	nameTrim := strings.Trim(name, " ")
 	if "" != nameTrim {
 		sql = sql + " and hot.patient_name like :patient_name"
-		m["patient_name"] = "%" + nameTrim + "%"
+		m["patient_name"] = nameTrim + "%"
 	}
 	gender := r.PatientGender
 	if gender != 0 {
@@ -43,7 +47,7 @@ func GetOrderList(r *req.OrderListReq) *resp.OrderRes {
 	pageSize := r.PageSize
 	start := (currentPage - 1) * pageSize
 	limit := " limit " + strconv.FormatUint(start, 10) + " , " + strconv.FormatUint(pageSize, 10)
-	utils.LogInfo("sql", sql)
+	utils.LogInfo("sql", selectList+sql+limit)
 	rows, err := global.MySqlx.NamedQuery(selectList+sql+limit, m)
 	if err != nil {
 		panic(err.Error())
@@ -70,5 +74,15 @@ func GetOrderList(r *req.OrderListReq) *resp.OrderRes {
 		}
 	}
 	res.InfoList = orderListRes
+	return res
+}
+
+func GetOrderDetails(orderNo string, branchId string) *resp.OrderDetailsRes {
+	sql := "select hot.order_no,       hot.patient_name,       hot.status,       hotc.described,       hb.name         as branch_name,       hot.booking_time,       hot.create_time as gmt_create,       hot.patient_mobile,       hot.ext from his_order_treatment as hot         inner join his_order_treatment_case hotc on hot.order_no = hotc.order_no         inner join his_branch hb on hot.branch_id = hb.id where hot.order_no = ?   and hot.branch_id = ?"
+	res := new(resp.OrderDetailsRes)
+	err := global.MySqlx.Get(res, sql, orderNo, branchId)
+	if err != nil {
+		panic(err.Error())
+	}
 	return res
 }
