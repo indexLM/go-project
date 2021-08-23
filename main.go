@@ -38,14 +38,14 @@ func main() {
 	}
 }
 
-type People struct {
-	Name string `res:"name"`
-	oppo *Phone `res:"phone"`
-}
-type Phone struct {
-	number uint64 `rr:"ceshi"`
-}
-
+//type People struct {
+//	Name string `res:"name"`
+//	oppo *Phone `res:"phone"`
+//}
+//type Phone struct {
+//	number uint64 `rr:"ceshi"`
+//}
+//
 //func main() {
 //	p := new(People)
 //	p2 := new(Phone)
