@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// GetOrderList 查询订单列表
 func GetOrderList(r *req.OrderListReq) *resp.OrderRes {
 	m := make(map[string]interface{})
 	selectList := "select hot.order_no, hot.patient_name,\n" +
@@ -16,7 +17,11 @@ func GetOrderList(r *req.OrderListReq) *resp.OrderRes {
 		" 		hb.name as branch_name,\n" +
 		"       hot.booking_time,\n" +
 		"       hot.status "
-	sql := "from his_order_treatment as hot inner join his_schedule_period_date_object as hspdo on hot.schedule_id=hspdo.id inner join his_schedule_date as hsd on hspdo.date_id=hsd.id left join his_branch hb on hb.id=hot.branch_id where  goods_id = 3 "
+	sql := "from his_order_treatment as hot " +
+		"inner join his_schedule_period_date_object as hspdo on hot.schedule_id=hspdo.id " +
+		"inner join his_schedule_date as hsd on hspdo.date_id=hsd.id " +
+		"left join his_branch hb on hb.id=hot.branch_id " +
+		"where  goods_id = 3 "
 	name := r.PatientName
 	nameTrim := strings.Trim(name, " ")
 	if "" != nameTrim {
@@ -77,6 +82,7 @@ func GetOrderList(r *req.OrderListReq) *resp.OrderRes {
 	return res
 }
 
+// GetOrderDetails 查询订单详情
 func GetOrderDetails(orderNo string, branchId string) *resp.OrderDetailsRes {
 	sql := "select hot.order_no,       hot.patient_name,       hot.status,       hotc.described,       hb.name         as branch_name,       hot.booking_time,       hot.create_time as gmt_create,       hot.patient_mobile,       hot.ext from his_order_treatment as hot         inner join his_order_treatment_case hotc on hot.order_no = hotc.order_no         inner join his_branch hb on hot.branch_id = hb.id where hot.order_no = ?   and hot.branch_id = ?"
 	res := new(resp.OrderDetailsRes)
@@ -85,4 +91,20 @@ func GetOrderDetails(orderNo string, branchId string) *resp.OrderDetailsRes {
 		panic(err.Error())
 	}
 	return res
+}
+
+// ModifyOrderExt 修改订单备注
+func ModifyOrderExt(orderNo string, ext string, branchId string) {
+	if orderNo == "" {
+		panic("订单号不能为空")
+	}
+	sql := "update his_order_treatment set ext=? where order_no=? and branch_id=? limit 1;"
+	result, err := global.MySqlx.Exec(sql, ext, orderNo, branchId)
+	if err != nil {
+		panic(err.Error())
+	}
+	_, err = result.RowsAffected()
+	if err != nil {
+		panic(err.Error())
+	}
 }

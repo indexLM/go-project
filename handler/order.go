@@ -24,3 +24,11 @@ func OrderDetails(c *gin.Context) {
 	res := service.GetOrderDetails(orderNo, branchIdStr)
 	resp.OkWithData(res, c)
 }
+func ModifyOrderExt(c *gin.Context) {
+	orderNo := c.PostForm("orderNo")
+	ext := c.PostForm("ext")
+	branchId := c.Keys["branchId"]
+	branchIdStr := fmt.Sprintf("%v", branchId)
+	service.ModifyOrderExt(orderNo, ext, branchIdStr)
+	resp.Ok(c)
+}

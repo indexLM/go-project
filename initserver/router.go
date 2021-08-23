@@ -10,6 +10,10 @@ func routerCommonInit(Router *gin.RouterGroup) {
 	{
 		AuthRouter.POST("/login", handler.Login)
 	}
+	AreaRouter := Router.Group("/area")
+	{
+		AreaRouter.GET("/district/list", handler.DistrictList)
+	}
 }
 func routerSecurityInit(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("/auth")
@@ -20,6 +24,7 @@ func routerSecurityInit(Router *gin.RouterGroup) {
 	{
 		OrderRouter.GET("/list", handler.OrderList)
 		OrderRouter.GET("/details", handler.OrderDetails)
+		OrderRouter.POST("/modifyExt", handler.ModifyOrderExt)
 	}
 	PatientRouter := Router.Group("/patient")
 	{

@@ -11,8 +11,16 @@ import (
 
 func GetPatientList(r *req.PatientListReq) *resp.PatientListRes {
 	m := make(map[string]interface{})
-	selectSql := "select distinct hp.patient_name,\n                hp.patient_gender,\n                hp.patient_age,\n                hot.patient_mobile,\n                hb.name         as branch_name,\n                hot.create_time as gmt_create "
-	whereSql := "from his_order_treatment hot\n         left join his_patient hp on hot.patient_id = hp.patient_id\n         left join his_branch hb on hot.branch_id = hb.id\nwhere 1 = 1 "
+	selectSql := "select distinct hp.patient_name," +
+		"                hp.patient_gender," +
+		"                hp.patient_age," +
+		"                hot.patient_mobile," +
+		"                hb.name         as branch_name," +
+		"                hot.create_time as gmt_create "
+	whereSql := "from his_order_treatment hot" +
+		"         left join his_patient hp on hot.patient_id = hp.patient_id" +
+		"         left join his_branch hb on hot.branch_id = hb.id " +
+		"where 1 = 1 "
 	name := r.PatientName
 	patientName := strings.Trim(name, " ")
 	if "" != patientName {
