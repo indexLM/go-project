@@ -14,3 +14,16 @@ func DistrictList(c *gin.Context) {
 	res := service.DistrictList(cityName)
 	resp.OkWithData(res, c)
 }
+func BranchList(c *gin.Context) {
+	cityId := c.Query("cityId")
+	if cityId == "" {
+		panic("城市不能为空")
+	}
+	districtId := c.Query("districtId")
+	if districtId == "" {
+		panic("区不能为空")
+	}
+	branchName := c.Query("branchName")
+	res := service.BranchList(cityId, districtId, branchName)
+	resp.OkWithData(res, c)
+}

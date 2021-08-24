@@ -34,7 +34,7 @@ func GetOrderList(r *req.OrderListReq) *resp.OrderRes {
 		m["patient_gender"] = gender
 	}
 	branchId := r.BranchId
-	if branchId != 0 {
+	if branchId != "" {
 		sql = sql + " and hot.branch_id = :branch_id"
 		m["branch_id"] = branchId
 	}

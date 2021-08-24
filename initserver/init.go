@@ -22,7 +22,8 @@ func Logger() {
 	global.MyLogger = logrus.New()
 	writer1 := &bytes.Buffer{}
 	writer2 := os.Stdout
-	writer3, err := os.OpenFile(global.MyServer.Log.Prefix, os.O_WRONLY|os.O_CREATE, 0755)
+	prefix := global.MyServer.Log.Prefix
+	writer3, err := os.OpenFile(prefix, os.O_WRONLY|os.O_CREATE, 0755)
 	if err != nil {
 		log.Fatalf("创建日志文件失败,失败原因: %v", err)
 	}

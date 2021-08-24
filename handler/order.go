@@ -14,6 +14,9 @@ func OrderList(c *gin.Context) {
 	if err != nil {
 		panic("参数错误")
 	}
+	branchId := c.Keys["branchId"]
+	branchIdStr := fmt.Sprintf("%v", branchId)
+	r.BranchId = branchIdStr
 	res := service.GetOrderList(r)
 	resp.OkWithData(res, c)
 }

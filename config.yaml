@@ -19,7 +19,7 @@ redis:
     tokenexpired: 7200 # expired time 2*60*60
 
 log:
-  prefix: 'D://opt/log.txt'
+  prefix: '/opt/log.txt'
   log-file: true
   stdout: 'DEBUG'
   file: 'DEBUG'

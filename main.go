@@ -13,6 +13,7 @@ func init() {
 	if err != nil {
 		fmt.Println("获取项目目录失败")
 	}
+	fmt.Println(dir + "/config.yaml")
 	err = utils.CofParse(dir+"/config.yaml", &global.MyServer)
 	if err != nil {
 		fmt.Println("初始化配置文件失败")

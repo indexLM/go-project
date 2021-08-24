@@ -13,6 +13,7 @@ func routerCommonInit(Router *gin.RouterGroup) {
 	AreaRouter := Router.Group("/area")
 	{
 		AreaRouter.GET("/district/list", handler.DistrictList)
+		AreaRouter.GET("/branch/list", handler.BranchList)
 	}
 }
 func routerSecurityInit(Router *gin.RouterGroup) {
