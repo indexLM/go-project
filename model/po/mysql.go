@@ -52,3 +52,9 @@ type CreditCard struct {
 	UserID uint
 	Number string
 }
+
+type BranchAdmin struct {
+	Name     *string `db:"name"`
+	Username *string `db:"username"`
+	Password *string `db:"password"`
+}

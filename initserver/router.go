@@ -14,6 +14,9 @@ func routerCommonInit(Router *gin.RouterGroup) {
 	{
 		AreaRouter.GET("/district/list", handler.DistrictList)
 		AreaRouter.GET("/branch/list", handler.BranchList)
+		AreaRouter.POST("/branch/import", handler.BranchImport)
+		AreaRouter.GET("/branch/adminReport", handler.BranchAdminReport)
+		AreaRouter.POST("/doctor/import", handler.DoctorImport)
 	}
 }
 func routerSecurityInit(Router *gin.RouterGroup) {
